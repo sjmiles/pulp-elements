@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+<head>
+
+  <title>pulp-router: composition demo</title>
+
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <link href="../../../pulp-elements/pulp-router.html" rel="import">
+
+  <style>
+
+    main-view {
+      font-family: sans-serif;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<template is="dom-bind">
+
+  <pulp-router route="{{route}}"></pulp-router>
+  <main-view route="{{route}}"></main-view>
+
+</template>
+
+<dom-module id="user-view">
+  <style>
+
+    :host {
+      display: block;
+    }
+    a {
+      cursor: pointer;
+      color: currentcolor;
+    }
+    [name] {
+      padding: 16px;
+    }
+    [name=second], [name=third] {
+      background-color: orange;
+    }
+
+  </style>
+  <template>
+
+    <pulp-route route="{{route}}" matches=":name/:topic" name="{{name}}" topic="{{topic}}"></pulp-route>
+
+    <h2>User name: <span>{{name}}</span></h2>
+    <h3>Topic Page: <span>{{topic}}</span></h3>
+
+    <a href="#/user/mo/profile">Go to Mo's Page</a><br>
+    <a href="#/user/larry/settings">Go to Larry's Page</a><br>
+    <a href="#/user/curly">Go to Curly's Page</a><br>
+
+  </template>
+  <script>
+
+    Polymer({
+    });
+
+  </script>
+</dom-module>
+
+<dom-module id="main-view">
+  <style>
+
+    :host {
+      display: block;
+    }
+    a {
+      cursor: pointer;
+      color: currentcolor;
+    }
+    [name] {
+      padding: 16px;
+    }
+    [name=second], [name=third] {
+      background-color: orange;
+    }
+
+  </style>
+  <template>
+
+    <pulp-route route="{{route}}" matches=":page" page="{{page}}" tail="{{tail}}"></pulp-route>
+
+    <h2>Page: <span>{{page}}</span></h2>
+    <h3>Tail: <span>{{tail}}</span></h3>
+
+    <a href="#/first/subroute">Go to First Page</a><br>
+    <a href="#/second/subroute">Go to Second Page</a><br>
+
+    <br>
+
+    <pulp-route route="{{route}}" matches="user" tail="{{userTail}}"></pulp-route>
+    <user-view route="{{userTail}}"></user-view>
+
+  </template>
+  <script>
+
+    Polymer({
+    });
+
+  </script>
+</dom-module>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<link rel="import" href="../../../../components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../../components/polymer/polymer.html">
+
+<dom-module id="pulp-drawer-panel">
+
+  <style>
+
+    :host {
+      display: block;
+    }
+
+    [drawerbox] {
+      display: block;
+
+      position: fixed;
+      top: 0;
+      width: 240px;
+      height: 100vh;
+      left: 0;
+
+      transform: translate3d(-240px, 0, 0);
+      transition: transform 200ms;
+      -webkit-transform: translate3d(-240px, 0, 0);
+      -webkit-transition: -webkit-transform 200ms;
+
+      background-color: whitesmoke;
+
+      overflow: auto;
+      @apply(--layout-vertical);
+    }
+
+    [drawerbox][open], [drawerbox][wide] {
+      transform: translate3d(0, 0, 0);
+      -webkit-transform: translate3d(0, 0, 0);
+    }
+
+    [dialogbox] {
+      display: block;
+
+      position: fixed;
+      top: 10vh;
+      width: 80vw;
+      height: 80vh;
+      left: 10vw;
+
+      transform: translate3d(-100vw, 0, 0);
+      transition: transform 200ms;
+
+      -webkit-transform: translate3d(0, -100vh, 0);
+      -webkit-transition: -webkit-transform 200ms;
+
+      background-color: whitesmoke;
+      -webkit-box-shadow: 0px 0px 21px 0px rgba(50, 50, 50, 0.75);
+      -moz-box-shadow:    0px 0px 21px 0px rgba(50, 50, 50, 0.75);
+      box-shadow:         0px 0px 21px 0px rgba(50, 50, 50, 0.75);
+
+      padding: 4px;
+      overflow: auto;
+      @apply(--layout-vertical);
+    }
+
+    [dialogbox][open] {
+      transform: translate3d(0, 0, 0);
+      -webkit-transform: translate3d(0, 0, 0);
+    }
+
+    scrim {
+      display: none;
+      position: fixed;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      left: 0;
+      opacity: 0.6;
+      background-color: black;
+    }
+
+    scrim[show]:not([wide]) {
+      display: block;
+    }
+
+    [mainbox][wide] {
+      position: relative;
+      left: 240px;
+    }
+
+  </style>
+
+  <template>
+
+    <div mainbox><content select="[main]"></content></div>
+
+    <scrim show$="{{scrimOpen}}" on-down="downAction"></scrim>
+
+    <div drawerbox open$="{{drawerOpen}}" on-tap="closeDrawerAction" on-down="_stopProp">
+
+      <content select="[drawer]"></content>
+
+    </div>
+
+    <div dialogbox open$="{{dialogOpen}}">
+
+      <content select="[dialog]"></content>
+
+    </div>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      properties: {
+
+        drawerOpen: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        dialogOpen: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        scrimOpen: {
+          computed: 'computeScrimOpen(drawerOpen, dialogOpen)',
+          observer: 'scrimOpenChanged'
+        }
+
+      },
+
+      listeners: {
+        //'mousewheel': '_stopEvent'
+      },
+
+      ready: function() {
+        //this.$$('scrim').addEventListener('mousewheel', this._stopEvent.bind(this));
+      },
+
+      computeScrimOpen: function(drawerOpen, dialogOpen) {
+        return drawerOpen || dialogOpen;
+      },
+
+      scrimOpenChanged: function(open) {
+        document.body.style.overflow = open ? 'hidden' : '';
+      },
+
+      openDrawerAction: function() {
+        this.drawerOpen = true;
+      },
+
+      closeDrawerAction: function() {
+        this.drawerOpen = false;
+      },
+
+      closeDialogAction: function() {
+        this.dialogOpen = false;
+      },
+
+      downAction: function(e) {
+        this._stopEvent(e);
+        this.drawerOpen = false;
+        this.dialogOpen = false;
+      },
+
+      _stopEvent: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      },
+
+      _stopProp: function(e) {
+        e.stopPropagation();
+      }
+
+    });
+
+  </script>
+
+</dom-module>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+
+  <title>pulp-router: login demo</title>
+
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <link href="../../../pulp-elements/pulp-router.html" rel="import">
+
+  <style>
+
+    main-view {
+      font-family: sans-serif;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<template is="dom-bind">
+
+  <pulp-router route="{{route}}"></pulp-router>
+  <main-view route="{{route}}"></main-view>
+
+</template>
+
+<dom-module id="main-view">
+  <style>
+
+    :host {
+      display: block;
+    }
+    a {
+      cursor: pointer;
+      color: currentcolor;
+    }
+    [name] {
+      padding: 16px;
+    }
+    [name=second], [name=third] {
+      background-color: orange;
+    }
+
+  </style>
+  <template>
+
+    <pulp-route route="{{route}}" matches=":page" page="{{requestedPage}}"></pulp-route>
+
+    <h3>Logged In: <span>{{loggedIn}}</span></h3>
+    <h2>Page: <span>{{page}}</span></h2>
+    <br>
+    <a href="#/first/subroute">Go to First Page</a><br>
+    <a href="#/second/subroute">Go to Second Page (must be logged in)</a><br>
+    <a href="#/third/subroute">Go to Third Page (must be logged in)</a><br>
+    <br>
+    <button on-tap="login">Click Here to Login</button><br>
+    <br>
+    <button on-tap="logout">Click Here to Logout</button><br>
+
+  </template>
+  <script>
+
+    Polymer({
+
+      properties: {
+        loggedIn: {
+          value: false
+        },
+        page: {
+          computed: '_computePage(requestedPage, loggedIn)'
+        }
+      },
+
+      _computePage: function(page, loggedIn) {
+        // compute page state
+        if (!page) {
+          return 'first';
+        } else if (page !== 'first') {
+          if (!loggedIn) {
+            return 'login';
+          }
+        }
+        return page;
+      },
+
+      login: function() {
+        this.loggedIn = true;
+      },
+
+      logout: function() {
+        this.loggedIn = false;
+      }
+
+    });
+
+  </script>
+</dom-module>
+
+</body>
+</html>

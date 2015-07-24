@@ -1,0 +1,39 @@
+<link href="routing-behavior.html" rel="import">
+
+<dom-module id="pulp-router">
+  <script>
+
+    Polymer({
+
+      behaviors: [
+        Polymer.PulpRoutingBehavior,
+        Polymer.PulpRoutingRootBehavior
+      ],
+
+      properties: {
+
+        route: {
+          notify: true
+        },
+
+        matches: {
+          value: ':base'
+        }
+
+      }
+
+    });
+  </script>
+</dom-module>
+
+<dom-module id="pulp-route">
+  <script>
+    Polymer({
+
+      behaviors: [
+        Polymer.PulpRoutingBehavior
+      ]
+
+    });
+  </script>
+</dom-module>
